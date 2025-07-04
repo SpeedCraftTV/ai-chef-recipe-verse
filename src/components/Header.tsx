@@ -1,8 +1,12 @@
-import { Search } from "lucide-react";
+import { Search, User } from "lucide-react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useAuth } from "@/hooks/useAuth";
 
 const Header = () => {
+  const { user, isAdmin, signOut } = useAuth();
+
   return (
     <header className="sticky top-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border">
       <div className="container mx-auto px-4 py-4">
@@ -43,8 +47,30 @@ const Header = () => {
                 className="pl-10 w-80"
               />
             </div>
-            <Button variant="outline">Connexion</Button>
-            <Button variant="default">Inscription</Button>
+            {user ? (
+              <div className="flex items-center space-x-2">
+                {isAdmin && (
+                  <Link to="/admin">
+                    <Button variant="outline" size="sm">
+                      Admin
+                    </Button>
+                  </Link>
+                )}
+                <Button variant="outline" size="sm" onClick={signOut}>
+                  <User className="w-4 h-4 mr-2" />
+                  Déconnexion
+                </Button>
+              </div>
+            ) : (
+              <div className="flex items-center space-x-2">
+                <Link to="/auth">
+                  <Button variant="outline">Connexion</Button>
+                </Link>
+                <Link to="/auth">
+                  <Button variant="default">Inscription</Button>
+                </Link>
+              </div>
+            )}
           </div>
         </div>
       </div>
