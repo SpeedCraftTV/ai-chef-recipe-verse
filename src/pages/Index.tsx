@@ -2,6 +2,7 @@ import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import Categories from "@/components/Categories";
 import FeaturedRecipes from "@/components/FeaturedRecipes";
+import { Link } from "react-router-dom";
 
 const Index = () => {
   return (
@@ -9,7 +10,9 @@ const Index = () => {
       <Header />
       <Hero />
       <Categories />
-      <FeaturedRecipes />
+      <div data-section="featured">
+        <FeaturedRecipes />
+      </div>
       
       {/* AI Generator Teaser */}
       <section className="py-16 bg-gradient-hero">
@@ -31,9 +34,11 @@ const Index = () => {
                 du stockage des recettes et de l'API d'intelligence artificielle.
               </div>
             </div>
-            <button className="bg-white text-primary px-8 py-3 rounded-lg font-semibold hover:shadow-glow transition-all duration-300 hover:scale-105">
-              Essayer le générateur IA
-            </button>
+            <Link to="/generator">
+              <button className="bg-white text-primary px-8 py-3 rounded-lg font-semibold hover:shadow-glow transition-all duration-300 hover:scale-105">
+                Essayer le générateur IA
+              </button>
+            </Link>
           </div>
         </div>
       </section>

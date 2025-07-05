@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Sparkles } from "lucide-react";
+import { Link } from "react-router-dom";
 import heroImage from "@/assets/hero-kitchen.jpg";
 
 const Hero = () => {
@@ -38,11 +39,16 @@ const Hero = () => {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 animate-fade-in">
-            <Button size="lg" variant="hero" className="text-lg px-8 py-4">
-              Générer une recette
-              <ArrowRight className="ml-2 w-5 h-5" />
-            </Button>
-            <Button variant="outline" size="lg" className="text-lg px-8 py-4">
+            <Link to="/generator">
+              <Button size="lg" variant="hero" className="text-lg px-8 py-4">
+                Générer une recette
+                <ArrowRight className="ml-2 w-5 h-5" />
+              </Button>
+            </Link>
+            <Button variant="outline" size="lg" className="text-lg px-8 py-4" onClick={() => {
+              const recipesSection = document.querySelector('[data-section="featured"]');
+              recipesSection?.scrollIntoView({ behavior: 'smooth' });
+            }}>
               Découvrir les recettes
             </Button>
           </div>

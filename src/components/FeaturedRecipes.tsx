@@ -84,7 +84,10 @@ const FeaturedRecipes = () => {
         </div>
 
         <div className="text-center mt-12">
-          <button className="bg-gradient-primary hover:shadow-glow text-primary-foreground px-8 py-3 rounded-lg font-semibold transition-all duration-300 hover:scale-105">
+          <button 
+            className="bg-gradient-primary hover:shadow-glow text-primary-foreground px-8 py-3 rounded-lg font-semibold transition-all duration-300 hover:scale-105"
+            onClick={() => alert('Fonctionnalité de catalogue complète bientôt disponible !')}
+          >
             Voir toutes les recettes
           </button>
         </div>

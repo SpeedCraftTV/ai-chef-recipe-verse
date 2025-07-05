@@ -30,12 +30,49 @@ const AIGenerator = () => {
     }
   };
 
+  const [generatedRecipe, setGeneratedRecipe] = useState<any>(null);
+
   const generateRecipe = () => {
     setIsGenerating(true);
-    // Simulation - en réalité, cela nécessiterait Supabase et une API IA
+    
+    // Simulation d'une recette générée par IA
     setTimeout(() => {
+      const mockRecipe = {
+        title: `Recette aux ${ingredients.slice(0, 2).join(' et ')}`,
+        description: `Une délicieuse recette créée avec vos ingrédients : ${ingredients.join(', ')}.`,
+        prepTime: Math.floor(Math.random() * 20) + 10,
+        cookTime: Math.floor(Math.random() * 30) + 15,
+        servings: Math.floor(Math.random() * 4) + 2,
+        difficulty: ['Facile', 'Moyen', 'Difficile'][Math.floor(Math.random() * 3)],
+        ingredients: ingredients.map(ing => ({
+          name: ing,
+          quantity: `${Math.floor(Math.random() * 300) + 100}g`
+        })).concat([
+          { name: 'Huile d\'olive', quantity: '2 c. à soupe' },
+          { name: 'Sel', quantity: '1 c. à café' },
+          { name: 'Poivre', quantity: 'Au goût' }
+        ]),
+        instructions: [
+          'Préparez tous vos ingrédients et lavez-les soigneusement.',
+          `Commencez par faire chauffer l'huile dans une poêle.`,
+          `Ajoutez ${ingredients[0] || 'les ingrédients principaux'} et faites cuire 5 minutes.`,
+          'Assaisonnez avec le sel et le poivre selon votre goût.',
+          `Incorporez le reste des ingrédients : ${ingredients.slice(1).join(', ')}.`,
+          'Laissez mijoter pendant 10-15 minutes à feu moyen.',
+          'Goûtez et ajustez l\'assaisonnement si nécessaire.',
+          'Servez chaud et dégustez !'
+        ],
+        nutritionalInfo: {
+          calories: Math.floor(Math.random() * 200) + 300,
+          proteins: Math.floor(Math.random() * 15) + 10,
+          carbs: Math.floor(Math.random() * 30) + 20,
+          fats: Math.floor(Math.random() * 10) + 5
+        },
+        tips: preferences ? `Conseil basé sur vos préférences : ${preferences}` : 'N\'hésitez pas à adapter les quantités selon vos goûts !'
+      };
+      
+      setGeneratedRecipe(mockRecipe);
       setIsGenerating(false);
-      // Ici on montrerait la recette générée
     }, 2000);
   };
 
@@ -140,7 +177,7 @@ const AIGenerator = () => {
             <CardTitle>Votre recette générée</CardTitle>
           </CardHeader>
           <CardContent>
-            {!isGenerating && ingredients.length === 0 ? (
+            {!isGenerating && !generatedRecipe && ingredients.length === 0 ? (
               <div className="text-center py-12 text-muted-foreground">
                 <Sparkles className="w-12 h-12 mx-auto mb-4 opacity-50" />
                 <p>Ajoutez des ingrédients pour voir la magie opérer !</p>
@@ -150,28 +187,108 @@ const AIGenerator = () => {
                 <div className="animate-spin w-8 h-8 border-2 border-primary border-t-transparent rounded-full mx-auto mb-4"></div>
                 <p className="text-muted-foreground">L'IA analyse vos ingrédients...</p>
               </div>
-            ) : (
-              <div className="space-y-4">
-                <div className="p-4 bg-primary/5 rounded-lg border border-primary/20">
-                  <div className="text-primary font-medium mb-2">💡 Fonctionnalité Pro</div>
-                  <p className="text-sm text-muted-foreground">
-                    La génération automatique de recettes nécessite une connexion à Supabase pour 
-                    utiliser les API d'intelligence artificielle. 
-                  </p>
-                  <Button variant="outline" size="sm" className="mt-3">
-                    Connecter Supabase
+            ) : generatedRecipe ? (
+              <div className="space-y-6">
+                <div className="border-b pb-4">
+                  <h3 className="text-xl font-bold text-foreground mb-2">{generatedRecipe.title}</h3>
+                  <p className="text-muted-foreground mb-4">{generatedRecipe.description}</p>
+                  
+                  <div className="flex flex-wrap gap-4 text-sm">
+                    <div className="flex items-center gap-1">
+                      <span className="font-medium">⏱️ Préparation:</span>
+                      <span>{generatedRecipe.prepTime} min</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <span className="font-medium">🔥 Cuisson:</span>
+                      <span>{generatedRecipe.cookTime} min</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <span className="font-medium">👥 Portions:</span>
+                      <span>{generatedRecipe.servings}</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <span className="font-medium">📊 Difficulté:</span>
+                      <Badge variant="secondary">{generatedRecipe.difficulty}</Badge>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <h4 className="font-semibold mb-3">📝 Ingrédients</h4>
+                  <div className="grid grid-cols-1 gap-2">
+                    {generatedRecipe.ingredients.map((ing: any, idx: number) => (
+                      <div key={idx} className="flex justify-between p-2 bg-muted/20 rounded">
+                        <span>{ing.name}</span>
+                        <span className="font-medium">{ing.quantity}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <h4 className="font-semibold mb-3">👩‍🍳 Instructions</h4>
+                  <div className="space-y-3">
+                    {generatedRecipe.instructions.map((step: string, idx: number) => (
+                      <div key={idx} className="flex gap-3 p-3 bg-muted/10 rounded">
+                        <div className="w-6 h-6 bg-primary text-primary-foreground rounded-full flex items-center justify-center text-sm font-semibold flex-shrink-0">
+                          {idx + 1}
+                        </div>
+                        <p className="text-sm">{step}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <h4 className="font-semibold mb-3">🍎 Informations nutritionnelles</h4>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="p-2 bg-muted/20 rounded text-center">
+                      <div className="font-semibold">{generatedRecipe.nutritionalInfo.calories}</div>
+                      <div className="text-xs text-muted-foreground">Calories</div>
+                    </div>
+                    <div className="p-2 bg-muted/20 rounded text-center">
+                      <div className="font-semibold">{generatedRecipe.nutritionalInfo.proteins}g</div>
+                      <div className="text-xs text-muted-foreground">Protéines</div>
+                    </div>
+                    <div className="p-2 bg-muted/20 rounded text-center">
+                      <div className="font-semibold">{generatedRecipe.nutritionalInfo.carbs}g</div>
+                      <div className="text-xs text-muted-foreground">Glucides</div>
+                    </div>
+                    <div className="p-2 bg-muted/20 rounded text-center">
+                      <div className="font-semibold">{generatedRecipe.nutritionalInfo.fats}g</div>
+                      <div className="text-xs text-muted-foreground">Lipides</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="p-4 bg-amber-500/10 border border-amber-500/20 rounded-lg">
+                  <div className="flex items-start gap-2">
+                    <span className="text-amber-600 text-sm">💡</span>
+                    <div>
+                      <div className="font-medium text-amber-800 text-sm mb-1">Conseil du chef</div>
+                      <p className="text-sm text-amber-700">{generatedRecipe.tips}</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex gap-2">
+                  <Button onClick={() => {
+                    setGeneratedRecipe(null);
+                    setIngredients([]);
+                    setPreferences('');
+                  }} variant="outline" className="flex-1">
+                    Nouvelle recette
+                  </Button>
+                  <Button onClick={() => {
+                    alert('Fonctionnalité de sauvegarde bientôt disponible !');
+                  }} className="flex-1">
+                    Sauvegarder
                   </Button>
                 </div>
-                
-                <div className="text-sm text-muted-foreground">
-                  <strong>Vos ingrédients :</strong> {ingredients.join(", ")}
-                  {preferences && (
-                    <>
-                      <br />
-                      <strong>Préférences :</strong> {preferences}
-                    </>
-                  )}
-                </div>
+              </div>
+            ) : (
+              <div className="text-center py-8 text-muted-foreground">
+                <p>Prêt à générer votre recette !</p>
               </div>
             )}
           </CardContent>

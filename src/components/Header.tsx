@@ -21,21 +21,33 @@ const Header = () => {
 
           {/* Navigation */}
           <nav className="hidden md:flex items-center space-x-8">
-            <a href="#" className="text-foreground hover:text-primary transition-colors">
+            <Link to="/" className="text-foreground hover:text-primary transition-colors">
               Accueil
-            </a>
-            <a href="#" className="text-foreground hover:text-primary transition-colors">
+            </Link>
+            <button 
+              onClick={() => {
+                const recipesSection = document.querySelector('[data-section="featured"]');
+                recipesSection?.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className="text-foreground hover:text-primary transition-colors"
+            >
               Recettes
-            </a>
-            <a href="#" className="text-foreground hover:text-primary transition-colors">
+            </button>
+            <Link to="/generator" className="text-foreground hover:text-primary transition-colors">
               Générateur IA
-            </a>
-            <a href="#" className="text-foreground hover:text-primary transition-colors">
+            </Link>
+            <button 
+              onClick={() => alert('Fonctionnalité de catégories bientôt disponible !')}
+              className="text-foreground hover:text-primary transition-colors"
+            >
               Catégories
-            </a>
-            <a href="#" className="text-foreground hover:text-primary transition-colors">
+            </button>
+            <button 
+              onClick={() => alert('Blog bientôt disponible !')}
+              className="text-foreground hover:text-primary transition-colors"
+            >
               Blog
-            </a>
+            </button>
           </nav>
 
           {/* Search & Auth */}

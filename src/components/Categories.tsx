@@ -60,7 +60,8 @@ const Categories = () => {
               <Button
                 key={category.name}
                 variant="outline"
-          className={`h-auto p-6 flex flex-col items-center gap-3 hover:scale-105 transition-all duration-200 ${category.color}`}
+                className={`h-auto p-6 flex flex-col items-center gap-3 hover:scale-105 transition-all duration-200 ${category.color}`}
+                onClick={() => alert(`Catégorie ${category.name} - Fonctionnalité de filtrage bientôt disponible !`)}
               >
                 <Icon className="w-8 h-8" />
                 <div className="text-center">
