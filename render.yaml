@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: recipe-app
+    env: node
+    plan: free
+    buildCommand: npm install && cd client && npx vite build --outDir ../dist/public --emptyOutDir && cd .. && mkdir -p server/public && cp -r dist/public/* server/public/
+    startCommand: NODE_ENV=production tsx server/index.ts
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: RENDER
+        value: true
